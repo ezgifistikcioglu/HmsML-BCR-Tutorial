@@ -1,0 +1,27 @@
+name: flutter_ml_bcr_tutorial
+description: A new Flutter application.
+
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  huawei_ml: ^2.0.5+300
+  cupertino_icons: ^1.0.0
+  flutter_absolute_path: ^1.0.6
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/bcr.png
+    - assets/bcr_bg.JPG
+    - assets/bcrIcon.jpg
+
