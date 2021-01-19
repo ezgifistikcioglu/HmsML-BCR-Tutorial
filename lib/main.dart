@@ -62,7 +62,6 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   _checkCameraPermissions() async {
-    print("_checkCameraPermissions..........");
     if (await MLPermissionClient().checkCameraPermission()) {
       print("CameraPermission Permissions are granted");
     } else {
@@ -71,7 +70,6 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   _checkStoragePermissions() async {
-    print("_checkStoragePermissions..........");
     if (await MLPermissionClient().checkWriteExternalStoragePermission()) {
       print("StoragePermission Permissions are granted");
       _checkCameraPermissions();
@@ -159,7 +157,7 @@ class _MyHomePageState extends State<MyHomePage> {
               color: Colors.purple,
             ),
             Text(
-              'Your personal information will be protected in accordance with the low.',
+              'Your personal information will be protected in accordance with the law.',
               style: TextStyle(fontSize: 10.0),
             ),
             filePath == null
