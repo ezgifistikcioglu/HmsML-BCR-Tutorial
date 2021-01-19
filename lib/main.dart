@@ -6,7 +6,7 @@ import 'package:flutter_ml_bcr_tutorial/ResultWidget.dart';
 import 'package:huawei_ml/bankcard/ml_bankcard_analyzer.dart';
 import 'package:huawei_ml/bankcard/ml_bankcard_settings.dart';
 import 'package:huawei_ml/models/ml_bankcard.dart';
-import 'package:huawei_ml/permissions/permission_client.dart';
+import 'package:permissions_plugin/permissions_plugin.dart';
 
 void main() {
   runApp(MyApp());
@@ -47,34 +47,28 @@ class _MyHomePageState extends State<MyHomePage> {
   dynamic _cardOrganization = "Card Organization";
   dynamic _cardIssuer = "Card Issuer";
   dynamic _cardNumber = "Card Number";
+  Map<Permission, PermissionState> permission;
+  bool test = false;
 
   @override
   void initState() {
-    _checkPermissions();
+    _requestPermissions();
     super.initState();
   }
 
-  _checkPermissions() async {
-    setState(() {
-      _checkCameraPermissions();
-      _checkStoragePermissions();
-    });
-  }
-
-  _checkCameraPermissions() async {
-    if (await MLPermissionClient().checkCameraPermission()) {
-      print("CameraPermission Permissions are granted");
+  _requestPermissions() async {
+    if (test == false) {
+      permission = await PermissionsPlugin.requestPermissions([
+        Permission.CAMERA,
+        Permission.READ_EXTERNAL_STORAGE,
+        Permission.WRITE_EXTERNAL_STORAGE
+      ]);
     } else {
-      await MLPermissionClient().requestCameraPermission();
-    }
-  }
-
-  _checkStoragePermissions() async {
-    if (await MLPermissionClient().checkWriteExternalStoragePermission()) {
-      print("StoragePermission Permissions are granted");
-      _checkCameraPermissions();
-    } else {
-      await MLPermissionClient().requestStoragePermission();
+      permission = await PermissionsPlugin.checkPermissions([
+        Permission.CAMERA,
+        Permission.READ_EXTERNAL_STORAGE,
+        Permission.WRITE_EXTERNAL_STORAGE
+      ]);
     }
   }
 
