@@ -13,7 +13,7 @@ dependencies:
   huawei_ml: ^2.0.5+300
   cupertino_icons: ^1.0.0
   flutter_absolute_path: ^1.0.6
-  permissions_plugin: ^1.1.4
+  permission_handler: ^5.0.1+1
 
 dev_dependencies:
   flutter_test:

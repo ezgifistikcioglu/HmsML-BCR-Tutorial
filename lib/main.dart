@@ -6,7 +6,7 @@ import 'package:flutter_ml_bcr_tutorial/ResultWidget.dart';
 import 'package:huawei_ml/bankcard/ml_bankcard_analyzer.dart';
 import 'package:huawei_ml/bankcard/ml_bankcard_settings.dart';
 import 'package:huawei_ml/models/ml_bankcard.dart';
-import 'package:permissions_plugin/permissions_plugin.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 void main() {
   runApp(MyApp());
@@ -29,7 +29,6 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
-
   final String title;
 
   @override
@@ -37,18 +36,17 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  MLBankcardAnalyzer analyzer;
-  MlBankcardSettings settings;
-  var filePath;
-  var nBitmapFilePath;
+  MLBankcardAnalyzer mLBankcardAnalyzer;
+  MlBankcardSettings mlBankcardSettings;
   bool _controlResult = false;
+
+  String filePath;
+  String nBitmapFilePath;
   dynamic _cardType = "Card Type";
   dynamic _cardExpire = "Card Expire";
   dynamic _cardOrganization = "Card Organization";
   dynamic _cardIssuer = "Card Issuer";
   dynamic _cardNumber = "Card Number";
-  Map<Permission, PermissionState> permission;
-  bool test = false;
 
   @override
   void initState() {
@@ -57,34 +55,29 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   _requestPermissions() async {
-    if (test == false) {
-      permission = await PermissionsPlugin.requestPermissions([
-        Permission.CAMERA,
-        Permission.READ_EXTERNAL_STORAGE,
-        Permission.WRITE_EXTERNAL_STORAGE
-      ]);
-    } else {
-      permission = await PermissionsPlugin.checkPermissions([
-        Permission.CAMERA,
-        Permission.READ_EXTERNAL_STORAGE,
-        Permission.WRITE_EXTERNAL_STORAGE
-      ]);
-    }
+    // You can request multiple permissions at once.
+    Map<Permission, PermissionStatus> statuses = await [
+      Permission.camera,
+      Permission.storage,
+    ].request();
+    print(statuses[Permission.camera]);
   }
 
   startMlBcrCameraCapture() async {
     // Create an MLBankcardAnalyzer object
-    analyzer = new MLBankcardAnalyzer();
+    mLBankcardAnalyzer = new MLBankcardAnalyzer();
     // Create an MLBankcardSettings object to configure the recognition.
-    settings = new MlBankcardSettings();
+    mlBankcardSettings = new MlBankcardSettings();
 
     try {
       // Start a capture activity to obtain bankcard information
-      MLBankcard card = await analyzer.captureBankcard(settings: settings);
+      MLBankcard card = await mLBankcardAnalyzer.captureBankcard(
+          settings: mlBankcardSettings);
 
-      var originalBitmapFilePath =
+      // URI to File
+      String originalBitmapFilePath =
           await FlutterAbsolutePath.getAbsolutePath(card.originalBitmap);
-      var numberBitmapFilePath =
+      String numberBitmapFilePath =
           await FlutterAbsolutePath.getAbsolutePath(card.numberBitmap);
 
       setState(() {
